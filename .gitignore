@@ -1,0 +1,8 @@
+# PyCharm
+.idea/
+
+# Bytecode
+*.pyc
+
+# Virtualenv
+venv/
