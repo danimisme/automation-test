@@ -106,3 +106,17 @@ def test_delete_user(auth_header, unique_email):
     response = requests.delete(url, headers=auth_header)
 
     assert_that(response.status_code).is_equal_to(204)
+
+
+# negative test
+def test_create_user_with_invalid_email(auth_header):
+    url = f'{BASE_URL}/users'
+    payload = {
+        "name": "John Doe",
+        "email": "Invalid-email",
+        "gender": "male",
+        "status": "active"
+    }
+    response = requests.post(url, json=payload, headers=auth_header)
+    assert_that(response.status_code).is_equal_to(422)
+
