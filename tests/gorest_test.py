@@ -108,7 +108,7 @@ def test_delete_user(auth_header, unique_email):
     assert_that(response.status_code).is_equal_to(204)
 
 
-# negative test
+# -------------- negative test -------------
 def test_create_user_with_invalid_email(auth_header):
     url = f'{BASE_URL}/users'
     payload = {
@@ -133,3 +133,13 @@ def test_create_user_with_invalid_gender(auth_header,unique_email):
     response = requests.post(url, json=payload, headers=auth_header)
     assert_that(response.status_code).is_equal_to(422)
     assert_that(response.json()[0]['field']).is_equal_to('gender')
+
+
+def test_get_nonexist_user(auth_header):
+    url = f'{BASE_URL}/users/notexistuser1234'
+    response = requests.get(url, headers=auth_header)
+    assert_that(response.status_code).is_equal_to(404)
+    assert_that(response.json()['message']).is_equal_to("Resource not found")
+
+
+
