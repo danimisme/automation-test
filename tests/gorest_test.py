@@ -44,4 +44,28 @@ def test_create_user(auth_header, unique_email):
     assert_that(response.json()['status']).is_equal_to(payload['status'])
 
 
+def test_get_user_details(auth_header, unique_email):
+    # Create user first
+    create_url = f'{BASE_URL}/users'
+    create_payload = {
+        "name": "Jane Doe",
+        "email": unique_email,
+        "gender": "female",
+        "status": "active"
+    }
+    create_response = requests.post(create_url, json=create_payload, headers=auth_header)
+    user_id = create_response.json()['id']
+
+    # Get user details
+    url = f'{BASE_URL}/users/{user_id}'
+    response = requests.get(url, headers=auth_header)
+
+    assert_that(response.status_code).is_equal_to(200)
+    assert_that(response.json()['id']).is_equal_to(user_id)
+    assert_that(response.json()['name']).is_equal_to(create_payload['name'])
+    assert_that(response.json()['email']).is_equal_to(unique_email)
+    assert_that(response.json()['gender']).is_equal_to(create_payload['gender'])
+    assert_that(response.json()['status']).is_equal_to(create_payload['status'])
+
+
 
