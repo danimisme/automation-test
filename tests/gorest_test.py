@@ -119,4 +119,17 @@ def test_create_user_with_invalid_email(auth_header):
     }
     response = requests.post(url, json=payload, headers=auth_header)
     assert_that(response.status_code).is_equal_to(422)
+    assert_that(response.json()[0]['field']).is_equal_to('email')
 
+
+def test_create_user_with_invalid_gender(auth_header,unique_email):
+    url = f'{BASE_URL}/users'
+    payload = {
+        "name": "John Doe",
+        "email": unique_email,
+        "gender": "invalid-gender",
+        "status": "active"
+    }
+    response = requests.post(url, json=payload, headers=auth_header)
+    assert_that(response.status_code).is_equal_to(422)
+    assert_that(response.json()[0]['field']).is_equal_to('gender')
