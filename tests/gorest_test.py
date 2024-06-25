@@ -36,6 +36,12 @@ def test_create_user(auth_header, unique_email):
         "gender": "male",
         "status": "active"
     }
-    response = requests.post(url,json=payload,headers=auth_header)
+    response = requests.post(url, json=payload, headers=auth_header)
     assert_that(response.status_code).is_equal_to(201)
+    assert_that(response.json()['name']).is_equal_to(payload['name'])
     assert_that(response.json()['email']).is_equal_to(unique_email)
+    assert_that(response.json()['gender']).is_equal_to(payload['gender'])
+    assert_that(response.json()['status']).is_equal_to(payload['status'])
+
+
+
