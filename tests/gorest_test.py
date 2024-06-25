@@ -89,3 +89,20 @@ def test_update_user_details(auth_header, unique_email):
     assert_that(response.status_code).is_equal_to(200)
     assert_that(response.json()['name']).is_equal_to(update_payload['name'])
 
+
+def test_delete_user(auth_header, unique_email):
+    create_url = f'{BASE_URL}/users'
+    create_payload = {
+        "name": "Janice Doe",
+        "email": "janicedoe@example.com",
+        "gender": "female",
+        "status": "active"
+    }
+    create_response = requests.post(create_url, json=create_payload, headers=auth_header)
+    user_id = create_response.json()['id']
+
+    # delete user
+    url = f'{BASE_URL}/users/{user_id}'
+    response = requests.delete(url, headers=auth_header)
+
+    assert_that(response.status_code).is_equal_to(204)
