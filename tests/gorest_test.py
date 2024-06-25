@@ -1,4 +1,5 @@
 import json
+import uuid
 from pprint import pprint
 
 import pytest
@@ -22,15 +23,19 @@ def auth_header():
     }
 
 
-def test_create_user(auth_header):
+@pytest.fixture
+def unique_email():
+    return f"testuser_{uuid.uuid4()}@example.com"
+
+
+def test_create_user(auth_header, unique_email):
     url = f'{BASE_URL}/users'
     payload = {
         "name": "John Doe",
-        "email": "johndoee33300011@mail.com",
+        "email": unique_email,
         "gender": "male",
         "status": "active"
     }
     response = requests.post(url,json=payload,headers=auth_header)
-    pprint(response.json())
     assert_that(response.status_code).is_equal_to(201)
-    assert_that(response.json()['email']).is_equal_to("johndoee33300011@mail.com")
+    assert_that(response.json()['email']).is_equal_to(unique_email)
