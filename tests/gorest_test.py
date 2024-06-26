@@ -1,4 +1,5 @@
 import json
+import os
 import uuid
 from pprint import pprint
 
@@ -6,7 +7,10 @@ import pytest
 import requests
 from assertpy import assert_that
 
-with open('../config.json') as config_file:
+current_dir = os.path.dirname(__file__)
+config_path = os.path.join(current_dir, '..', 'config.json')
+
+with open(config_path) as config_file:
     config = json.load(config_file)
 
 
